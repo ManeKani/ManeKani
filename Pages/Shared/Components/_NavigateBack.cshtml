@@ -1,0 +1,13 @@
+@model _NavigateBackModel
+
+<div class="text-neutral">
+    @foreach (var item in Model.BreadCrumbs().Select((value, index) => new { value, index }))
+    {
+        @if (item.index > 0)
+        {
+            <span class="text-inherit">/</span>
+        }
+        <a asp-page="@item.value.Page"
+            class="link link-hover text-inherit hover:text-accent transition-colors py-2 pr-1.5 [&:not(:first-child)]:pl-1.5">@item.value.Text</a>
+    }
+</div>

@@ -1,0 +1,10 @@
+@page
+
+@model Settings.SettingsIndexModel
+@{
+    ViewData["Title"] = "Settings";
+    var user = HttpContext.User.Identity?.Name ?? "";
+}
+
+<h1>Settings</h1>
+@user

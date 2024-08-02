@@ -1,0 +1,25 @@
+@{
+    Layout = "Layouts/_Layout";
+    @* ViewData["Location"] = new List<string>() { "Settings" }; *@
+}
+
+<div class="min-h-screen bg-base100 flex flex-col w-full">
+    <div class="flex h-full w-full">
+        @* {#
+        <Sidebar /> #} *@
+        <div class="page w-full relative mb-28">
+            @* {#
+            <Navbar user={userInfo} /> #} *@
+            <div class="mt-2.5 max-w-screen-2xl w-full md:p-2.5">
+                @foreach (var l in (List<string>?)ViewData["Location"] ?? [])
+                {
+                    <span class="text-base-content text-sm">
+                        <a href="/">@l</a>
+                    </span>
+                    <span class="text-base-content text-sm">/</span>
+                }
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>

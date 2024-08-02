@@ -1,0 +1,89 @@
+@model CreateApiKeyFormModel
+
+
+<div id="api-key-form">
+    <form class="space-y-5 mt-6">
+        <input name="__RequestVerificationToken" type="hidden" value="@Model.CSRF"></input>
+        <p>
+            API tokens are used to authenticate your application with the server.
+            They are used to grant access to your data, so be careful with what
+            permissions you give to each token.
+        </p>
+        <section class="w-full">
+            <label class="form-control w-full">
+                <div class="label">
+                    <span class="label-text">
+                        API key name <span class="text-red-600">*</span>
+                    </span>
+                </div>
+                <input autocomplete="off" type="text" name="apikey_name" 
+                    placeholder="This key will be used for..." 
+                    class="input input-bordered bg-base-200 w-full" 
+                    readonly="@(!string.IsNullOrEmpty(Model.GeneratedApiKey))" />
+            </label>
+        </section>
+        <section class="w-full">
+            <h2 class="section-title-sm">
+                Permissions
+            </h2>
+
+            <p>
+                Every token have read access to your data (being able to see
+                your decks, cards, study materials and so on).
+            </p>
+            <p>
+                By checking the options below, applications may have the power
+                to create, update, and delete your data, according to the
+                permissions you give to it.
+            </p>
+            <div class="w-full mt-6">
+                <partial name="Components/_ApiKeyPermissionTable" model='new ApiKeyPermissionTableModel(false, [
+                    new ApiKeyPermission { Name = "deck" },
+                    new ApiKeyPermission { Name = "subject" },
+                    new ApiKeyPermission { Name = "review" },
+                    new ApiKeyPermission { Name = "study_data" },
+                ]) {}' />
+            </div>
+        </section>
+
+        @* {# disabled={
+        isUpdating || (tokenIsActive==userToken.isActive && (tokenName.length==0 ||
+        tokenName==userToken.name)) } #} *@
+    
+        <div class="fixed lg:relative left-0 bottom-0 py-2 px-4 lg:px-0 w-full bg-background-100 lg:bg-transparent shadow-[0px_-10px_10px_#0000001d] lg:shadow-none">
+        <button class="wk-btn wk-btn-primary w-full btn-accent no-animation justify-center" 
+            @if (!string.IsNullOrEmpty(Model.GeneratedApiKey)) {
+                @:disabled
+            } else {
+                @:hx-post="/settings/api-keys/new" hx-trigger="click" hx-swap="outerHTML" hx-target="#api-key-form"
+            }
+            >
+            Create
+        </button>
+        </div>
+    </form>
+
+    @* @if (Model.GeneratedApiKey is string key && !string.IsNullOrEmpty(Model.GeneratedApiKey))
+    { *@
+        <dialog class="modal modal-bottom bg-black/50 sm:modal-middle mt-0" open="">
+            <div class="modal-box">
+                <div class="border-b border-background-200 px-6 pb-3 pt-4">
+                    <h3 class="text-lg font-medium text-text-200">API key created</h3>
+                </div>
+                <div class="my-4 space-y-3 px-4">
+                    <p class="text-text-300">You have successfully created a new API key! For security reasons, this key
+                    will only be shown once, make sure to copy it and store in a safe place.</p>
+
+                    <input type="text" name="apikey_name" class="text-input" value="@@key" readonly />
+                </div>
+
+                <div class="border-gray-300 px-6 pb-4 pt-2">
+                    <div class="flex w-full gap-4">
+                        <button class="wk-btn wk-btn-secondary w-full">Copy</button>
+                        <a href="/settings/api-keys" class="wk-btn wk-btn-primary">Continue</a>
+                    </div>
+                </div>
+            </div>
+        </dialog>
+    @* } *@
+</div>

@@ -1,0 +1,43 @@
+<div class="fixed left-0 top-0 h-full max-w-60 w-full bg-base-200 z-[50] Sflex">
+    <div class="flex flex-col w-full px-2 gap-2">
+        <div class="leading-none py-0.5 h-12 border-b-2 border-separate border-base-300 ">
+            <a asp-page="/index"
+                class="relative h-min px-2 inline-flex items-center gap-1 transition-[filter] ease-in duration-200 filter drop-shadow-[0_0_5px_oklch(var(--a)_/_0)] hover:drop-shadow-[0_0_5px_oklch(var(--a)_/_0.36)]">
+                <span class="text-accent">
+                    @await Html.Icon("Claw", new IconOptions { Size = 40 })
+                </span>
+                <span class="font-title font-bold text-xl">ManeKani</span>
+            </a>
+        </div>
+        <a href="#" class="hover:bg-base-300 rounded-md px-2 py-3 h-min inline-flex items-center gap-2">
+            <span>
+                @await Html.Icon("Library")
+            </span>
+            <span>My Library</span>
+        </a>
+        <a href="#" class="hover:bg-base-300 rounded-md px-2 py-3 h-min inline-flex items-center gap-2">
+            <span>
+                @await Html.Icon("Explore")
+            </span>
+            <span>Explore</span>
+        </a>
+        <a href="#" class="hover:bg-base-300 rounded-md px-2 py-3 h-min inline-flex items-center gap-2">
+            <span>
+                @await Html.Icon("Heart")
+            </span>
+            <span>Favorites</span>
+        </a>
+        <a href="#" class="hover:bg-base-300 rounded-md px-2 py-3 h-min inline-flex items-center gap-2">
+            <span>
+                @await Html.Icon("Blocks")
+            </span>
+            <span>Lists</span>
+        </a>
+        <a href="#" class="hover:bg-base-300 rounded-md px-2 py-3 h-min inline-flex items-center gap-2">
+            <span>
+                @await Html.Icon("Clock")
+            </span>
+            <span>Activity</span>
+        </a>
+    </div>
+</div>

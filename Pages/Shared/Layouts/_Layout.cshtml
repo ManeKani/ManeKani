@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ManeKani</title>
+    <link rel="stylesheet" href="~/css/colors.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/bundle.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ManeKani.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+
+    <div class="w-full grid grid-cols-[15rem_1fr] grid-rows-[3rem_1fr]">
+        <aside class="col-span-1 row-span-2">
+            <partial name="Components/_Sidebar" model='new Components.SidebarModel() { }' />
+        </aside>
+        <header class="col-span-1 row-span-1">
+            <partial name="Components/_Navbar" model='new Components.NavbarModel() {NotificationCount=2}' />
+        </header>
+
+        <div class="w-full col-span-1">
+            <main role="main" class="pb-3 w-full">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.1"
+        integrity="sha384-QWGpdj554B4ETpJJC9z+ZHJcA/i59TyjxEPXiiUgN2WmTyV5OEZWCD6gQhgkdpB/"
+        crossorigin="anonymous"></script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

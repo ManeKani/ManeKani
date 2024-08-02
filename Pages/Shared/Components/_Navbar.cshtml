@@ -1,0 +1,41 @@
+@model NavbarModel
+
+<nav
+    class="bg-base-200 z-50 px-3 py-1.5 h-12 flex justify-between items-center fixed w-[calc(100%-15rem)] border-b border-base-300">
+    <label class="input input-bordered px-2 min-w-48 w-2/3 bg-base-300 flex items-center gap-2 h-full">
+        <span class="text-base-content">
+            @await Html.Icon("Search", new IconOptions { Size = 20 })
+        </span>
+        <input type="text" class="grow" placeholder="Search" autocomplete="off" />
+    </label>
+
+    <div class="flex items-center space-x-3 h-full justify-center">
+        <div class="group indicator leading-[0]" title="notifications">
+            <button class="text-base-content filter transition-all group-focus:brightness-75 group-hover:brightness-75">
+                @await Html.Icon("Bell")
+            </button>
+            <span class="badge badge-xs badge-accent indicator-item"></span>
+        </div>
+        <div class="group relative leading-[0]">
+            <a asp-page="/settings/index"
+                class="text-base-content transition-all filter group-focus:brightness-75 group-hover:brightness-75"
+                title="Settings">
+                @await Html.Icon("Settings")
+            </a>
+        </div>
+        <div class="relative leading-[0]">
+            @if (User.Identity?.IsAuthenticated ?? false)
+            {
+                <button class="user-icon w-8 h-8">
+                    @* <img src="@Model.UserData.ProfilePicture" alt="User Profile Picture"
+                class="w-full h-full rounded-full" /> *@
+                    <div class="w-full h-full bg-accent rounded-full"></div>
+                </button>
+            }
+            else
+            {
+                <a href="/login" class="text-base-content focus:text-base-content hover:text-base-content">Sign In</a>
+            }
+        </div>
+    </div>
+</nav>

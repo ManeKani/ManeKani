@@ -1,0 +1,29 @@
+@model ApiKeyPermissionTableModel
+
+<table class="text-sm text-left w-full rounded-sm shadow-sm text-text-500">
+    <thead class="text-xs text-text-300 font-medium bg-background-200 border-b border-background-200">
+        <tr>
+            <th scope="col" class="px-6 py-4 whitespace-nowrap w-full">Resource</th>
+            <th scope="col" class="px-6 py-4 whitespace-nowrap text-center">Modify</th>
+            <th scope="col" class="px-6 py-4 whitespace-nowrap text-center">Delete</th>
+        </tr>
+    </thead>
+    <tbody class="divide-y divide-background-200">
+        @foreach (var permission in Model.InitialPermissions ?? [])
+        {
+            <tr class="bg-background-100 hover:bg-background-200/50 text-text-400">
+                <th scope="row" class="px-6 py-4 font-medium text-base-content">
+                    @permission.Name
+                </th>
+                <td class="px-6 py-4 text-center">
+                    <input class="checkbox checkbox-primary w-5 h-5" type="checkbox"
+                        name="apikey_permissions" value='@($"{permission.Name}_write")' checked="@permission.CanModify" disabled="@Model.ReadOnly" />
+                </td>
+                    <td class="px-6 py-4 text-center">
+                        <input class="checkbox checkbox-primary w-5 h-5" type="checkbox"
+                            name="apikey_permissions" value='@($"{permission.Name}_delete")' checked="@permission.CanDelete" disabled="@Model.ReadOnly" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

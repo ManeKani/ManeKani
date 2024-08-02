@@ -1,0 +1,130 @@
+@page
+@model Settings.ApiKeys.ApiKeysIndexModel
+@{
+    ViewData["Title"] = "API Keys";
+}
+
+@using Humanizer;
+
+
+<section class="px-5 w-full">
+    <div>
+        <partial name="Components/_NavigateBack" model='
+        new Pages.Shared.Components._NavigateBackModel { ReturnUrl = "/settings" }
+    ' />
+        <h1 class="font-title font-bold text-3xl text-base-content py-2">API Keys</h1>
+        <p class="max-w-3xl">
+            An API key can be used by third-party applications to improve your experience.
+        </p>
+    </div>
+
+    <div class="w-full mt-6">
+        <div class="bg-base-200 rounded-sm border border-base-300 w-full ">
+            <div class="flex items-center border-b border-base-300 py-3.5 px-6">
+                <div class="flex-grow">
+                    <h2 class="font-title font-medium text-xl text-base-content">
+                        ManeKani API Keys
+                    </h2>
+                </div>
+                <a href="/settings/api-keys/new" class="wk-btn wk-btn-primary gap-2">
+                    <span class="text-inherit">
+                        @await Html.Icon("Plus")
+                    </span>
+                    Create new API key
+                </a>
+            </div>
+            <table class="text-left text-sm text-text-500 w-full overflow-x-hidden max-w-full">
+                        <thead
+                            class="text-xs text-text-300 font-medium bg-background-200 border-b border-background-200">
+                            <tr>
+                                <th scope="col" class="px-6 py-4 whitespace-nowrap">
+                                    Name
+                                </th>
+                                <th scope="col" class="px-6 py-4 whitespace-nowrap">
+                                    Prefix
+                                </th>
+                                <th scope="col" class="px-6 py-4 whitespace-nowrap">
+                                    Created At
+                                </th>
+                                <th scope="col" class="px-6 py-4 whitespace-nowrap">
+                                    Status
+                                </th>
+                                <th scope="col" class="px-6 py-4 whitespace-nowrap">
+                                    Last Used
+                                </th>
+                                <th scope="col" class="px-6 py-4 whitespace-nowrap">
+                                    <span class="sr-only">More</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="api-keys-content" class="divide-y divide-background-200">
+                            @if (Model.ApiKeys.Any())
+                            {
+                                @foreach (var apiKey in Model.ApiKeys)
+                                {
+                                    <tr class="bg-background-100 text-left hover:bg-background-200/50 text-text-400">
+                                        <th scope="row" class="px-6 py-3 font-medium text-base-content whitespace-nowrap">
+                                            @apiKey.Name
+                                        </th>
+                                        <td class="px-6 py-3 text-base-content font-mono">
+                                            <pre>@apiKey.Prefix</pre>
+                                        </td>
+                                        <td class="px-6 py-3 first-letter:uppercase">
+                                            <span title="@apiKey.CreatedAt"> @apiKey.CreatedAt.Humanize() </span>
+                                        </td>
+                                        <td class="px-6 py-3">
+                                            <div class="flex space-x-2 items-center py-1.5">
+                                                @if (apiKey.RevokedAt is DateTimeOffset revokedAt)
+                                                {
+                                                <span class="w-3 h-3 bg-amber-500/50 rounded-full grid place-items-center">
+                                                    <span class="w-1.5 h-1.5 bg-amber-500/50 rounded-full"></span>
+                                                </span>
+                                                <span class="text-amber-500 rounded-sm font-medium" title="@revokedAt">
+                                                    Revoked
+                                                </span>
+                                                }
+                                                else
+                                                {
+                                                <span class="w-3 h-3 @if (true) {} else {} bg-green-500/50 rounded-full grid place-items-center">
+                                                    <span class="w-1.5 h-1.5 bg-green-500/50 rounded-full"></span>
+                                                </span>
+                                                <span class="text-green-500 rounded-sm font-medium">
+                                                    Active
+                                                </span>
+                                                }
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-3 first-letter:uppercase">
+                                            @if (apiKey.UsedAt != null)
+                                            {
+                                            <span title='@apiKey.UsedAt'> @apiKey.UsedAt?.Humanize() </span>
+                                            }
+                                            else
+                                            {
+                                            <span>Never</span>
+                                            }
+                                        </td>
+                                        <td class="px-6 py-3 flex gap-2 justify-end">
+                                            <a class="btn-sm btn btn-secondary btn-ghost font-normal" href="/settings/api-keys/manage/{{key_info.id}}">Manage</a>
+                                            <button class="btn btn-sm btn-error btn-ghost text-error font-normal" hx-delete="/settings/api-keys/manage/{{key_info.id}}"
+                                                hx-confirm="Are you sure you want to delete this API key?" hx-target="closest tr"
+                                                hx-swap="outerHTML">Delete</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                    <tr class="bg-background-100 text-left hover:bg-background-200/50 text-text-400">
+                        <td class="px-6 py-3 text-center" colspan="6">
+                            No API keys found
+                        </td>
+                    </tr>
+                            }
+                </tr>
+                </tbody>
+
+                </table>
+    </div>
+    </div>
+</section>
