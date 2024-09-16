@@ -1,0 +1,25 @@
+@page
+
+@model Settings.SettingsIndexModel
+@{
+    ViewData["Title"] = "Settings";
+    ViewData["Setting"] = "Account";
+}
+
+
+@* Account settings *@
+<section>
+    @* General account settings *@
+    <h2>General</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <h3>Username</h3>
+            <p>test-username</p>
+        </div>
+        <div>
+            <h3>Email</h3>
+            <p>test@test.com</p>
+        </div>
+    </div>
+
+</section>

@@ -17,13 +17,15 @@ public class LoginModel : PageModel
     public IActionResult OnGet()
     {
         _logger.LogInformation("Login page requested");
+        var oryAuthUrl = $"{Request.Scheme}://127.0.0.1:4433/self-service/login/browser";
+
         if (string.IsNullOrEmpty(ReturnTo))
         {
-            return new RedirectResult($"http://127.0.0.1:4433/self-service/login/browser");
+            return new RedirectResult(oryAuthUrl);
         }
         else
         {
-            return new RedirectResult($"http://127.0.0.1:4433/self-service/login/browser?return_to={ReturnTo}");
+            return new RedirectResult(oryAuthUrl + "?return_to=" + ReturnTo);
         }
     }
 

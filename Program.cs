@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http.Extensions;
 using ManeKani.Auth.Ory;
 using ManeKani.DB;
 using ManeKani.Auth.Policies;
-using Microsoft.AspNetCore.Authentication.BearerToken;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,6 +78,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStatusCodePages(context =>
 {
+    // if we get a 401, redirect to login
     if (context.HttpContext.Response.StatusCode == 401)
     {
         var returnTo = context.HttpContext.Request.GetEncodedUrl();

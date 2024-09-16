@@ -1,23 +1,27 @@
+@using ManeKani.Pages.Shared.Layouts;
+
 @{
     Layout = "Layouts/_Layout";
-    @* ViewData["Location"] = new List<string>() { "Settings" }; *@
 }
+
 
 <div class="min-h-screen bg-base100 flex flex-col w-full">
     <div class="flex h-full w-full">
-        @* {#
-        <Sidebar /> #} *@
+
         <div class="page w-full relative mb-28">
-            @* {#
-            <Navbar user={userInfo} /> #} *@
-            <div class="mt-2.5 max-w-screen-2xl w-full md:p-2.5">
-                @foreach (var l in (List<string>?)ViewData["Location"] ?? [])
-                {
-                    <span class="text-base-content text-sm">
-                        <a href="/">@l</a>
-                    </span>
-                    <span class="text-base-content text-sm">/</span>
-                }
+            <div class="mt-2.5 max-w-screen-2xl w-full md:py-2.5 md:px-8">
+                <nav class="space-y-2 pb-4">
+                    <h1>Settings</h1>
+                    <div class="flex space-x-2 w-full overflow-x-auto">
+                        @{
+                            var navigatorClasses = "py-2 px-4 font-medium transition-colors border-b border-transparent [&.active]:border-accent hover:border-primary link no-underline hover:bg-primary/10 rounded-t list-none";
+                        }
+                        @Html.SettingsNavigator("Account", "Account", "/settings/account", @navigatorClasses)
+                        @Html.SettingsNavigator("Profile", "Profile", "/settings/profile", @navigatorClasses)
+                        @Html.SettingsNavigator("API Keys", "ApiKeys", "/settings/api-keys", @navigatorClasses)
+                        @Html.SettingsNavigator("Preferences", "Preferences", "/settings/preferences", @navigatorClasses)
+                    </div>
+                </nav>
                 @RenderBody()
             </div>
         </div>

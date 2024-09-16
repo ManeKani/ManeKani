@@ -63,8 +63,8 @@
         </div>
     </form>
 
-    @* @if (Model.GeneratedApiKey is string key && !string.IsNullOrEmpty(Model.GeneratedApiKey))
-    { *@
+    @if (Model.GeneratedApiKey is string key && !string.IsNullOrEmpty(Model.GeneratedApiKey))
+    {
         <dialog class="modal modal-bottom bg-black/50 sm:modal-middle mt-0" open="">
             <div class="modal-box">
                 <div class="border-b border-background-200 px-6 pb-3 pt-4">
@@ -74,7 +74,7 @@
                     <p class="text-text-300">You have successfully created a new API key! For security reasons, this key
                     will only be shown once, make sure to copy it and store in a safe place.</p>
 
-                    <input type="text" name="apikey_name" class="text-input" value="@@key" readonly />
+                    <input type="text" name="apikey_name" class="text-input" value="@key" readonly />
                 </div>
 
                 <div class="border-gray-300 px-6 pb-4 pt-2">
@@ -85,5 +85,5 @@
                 </div>
             </div>
         </dialog>
-    @* } *@
+    }  
 </div>

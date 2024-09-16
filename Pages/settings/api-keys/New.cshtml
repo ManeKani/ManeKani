@@ -8,20 +8,16 @@
 @inject IAntiforgery antiforgery
 @{
     ViewData["Title"] = "New API Key";
-    var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+    var csrfToken = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
 <section class="px-5 w-full">
     <div class="w-full relative">
-        <partial name="Components/_NavigateBack" model='
-            new _NavigateBackModel { ReturnUrl = "/settings/api-keys" }
-        ' />
-        <h1 class="font-title font-bold text-3xl text-base-content py-2">Create API Key</h1>
-        <p class="max-w-3xl">Create a new API key</p>
+        <p class="max-w-3xl mt-6">Create a new API key</p>
 
         <partial name="Components/_CreateApiKeyForm" model='
             new CreateApiKeyFormModel {
-                CSRF = token,
+                CSRF = csrfToken,
             }
         ' />
     </div>

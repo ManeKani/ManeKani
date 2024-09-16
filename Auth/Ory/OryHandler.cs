@@ -2,6 +2,7 @@ using System.Security.Claims;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
+using Ory.Client.Client;
 
 namespace ManeKani.Auth.Ory;
 
@@ -29,25 +30,38 @@ public class OryAuthenticationHandler : SignInAuthenticationHandler<OryAuthentic
         var cookie = CookieManager.GetRequestCookie(Context, Options.SessionKey!);
         if (string.IsNullOrEmpty(cookie))
         {
-            Logger.LogInformation("No session cookie found");
+            // Logger.LogInformation("No session cookie found");
             return AuthenticateResults.MissingSessionCookie;
         }
 
-        var session = await Options.Ory.ToSessionAsync(cookie: $"{Options.SessionKey}={cookie}");
-        if (session is null)
+        try
         {
-            Logger.LogInformation("Failed to retrieve session");
+            var session = await Options.Ory.ToSessionAsync(cookie: $"{Options.SessionKey}={cookie}");
+            if (session is null)
+            {
+                Logger.LogInformation("Failed to retrieve session");
+                return AuthenticateResults.FailedToRetrieveSession;
+            }
+            if (!session.Active)
+            {
+                Logger.LogInformation("Session is not active");
+                return AuthenticateResults.ExpiredTicket;
+            }
+
+            var ticket = OryIdentity.AuthenticationTicket(Scheme.Name, session);
+
+            return AuthenticateResult.Success(ticket);
+        }
+        catch (ApiException e)
+        {
+            Logger.LogError(e, "Failed to retrieve session");
+            if (e.ErrorCode == 401)
+            {
+                // TODO: Create an invalid session result
+                return AuthenticateResults.FailedToRetrieveSession;
+            }
             return AuthenticateResults.FailedToRetrieveSession;
         }
-        if (!session.Active)
-        {
-            Logger.LogInformation("Session is not active");
-            return AuthenticateResults.ExpiredTicket;
-        }
-
-        var ticket = OryIdentity.AuthenticationTicket(Scheme.Name, session);
-
-        return AuthenticateResult.Success(ticket);
     }
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()

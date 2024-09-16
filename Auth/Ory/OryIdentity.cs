@@ -1,14 +1,21 @@
 using System.Security.Claims;
 using System.Security.Principal;
 using Microsoft.AspNetCore.Authentication;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Ory.Client.Model;
 
-
+namespace ManeKani.Auth.Ory;
 
 public class OryIdentity : IIdentity
 {
+
+    public string Id { get; }
+    public string Email { get; }
+
+    public string? AuthenticationType { get; }
+    public bool IsAuthenticated { get; }
+    public string Name { get => Id; }
+
     public OryIdentity(string scheme, ClientSession session)
     {
         // id.Traits.
@@ -17,10 +24,10 @@ public class OryIdentity : IIdentity
         IsAuthenticated = session.Active;
 
         var traitsObj = (JObject)session.Identity.Traits;
-        var metadataObj = (JObject)session.Identity.MetadataPublic;
+        var metadataObj = (JObject?)session.Identity.MetadataPublic;
 
         Email = traitsObj["email"]?.ToString() ?? "";
-        Id = metadataObj["id"]?.ToString() ?? "";
+        Id = metadataObj?["id"]?.ToString() ?? "";
     }
 
     public static AuthenticationTicket AuthenticationTicket(string scheme, ClientSession session)
@@ -36,14 +43,4 @@ public class OryIdentity : IIdentity
 
         return ticket;
     }
-
-
-    public string Id { get; }
-    public string Email { get; }
-
-    public string? AuthenticationType { get; }
-    public bool IsAuthenticated { get; }
-    public string Name { get => Id; }
-
-
 }

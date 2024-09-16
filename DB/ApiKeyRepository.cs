@@ -3,7 +3,6 @@ using System.Text.Json;
 using Dapper;
 using ManeKani.Core.Interfaces;
 using ManeKani.Core.Models;
-using Microsoft.AspNetCore.Http.Extensions;
 using SqlKata.Execution;
 
 namespace ManeKani.DB;

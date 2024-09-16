@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication;
 
+namespace ManeKani.Auth.Ory;
+
 internal static class AuthenticateResults
 {
     internal static AuthenticateResult FailedToRetrieveSession = AuthenticateResult.Fail("Invalid authentication session");
