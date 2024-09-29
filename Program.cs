@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http.Extensions;
 using ManeKani.Auth.Ory;
 using ManeKani.DB;
 using ManeKani.Auth.Policies;
+using Microsoft.AspNetCore.Authorization;
+using ManeKani.Auth.ApiKey;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,7 @@ builder.WebHost.ConfigureKestrel(opt =>
     var port = builder.Configuration.GetValue<int>("APP_PORT", 5001);
     opt.ListenAnyIP(port);
 });
+
 
 // Add DB handler
 builder.Services.AddTransient(sp =>
@@ -42,14 +45,13 @@ builder.Services.AddAuthorization(options =>
         options.AddLoginPolicy();
     }
 );
+builder.Services.AddSingleton<IApiKeyValidator, ApiKeyValidator>();
 
 builder.Services.AddControllers();
-
-// Add services to the container.
 builder.Services.AddRazorPages(
     options =>
     {
-        options.Conventions.AuthorizeFolder("/settings", LoginPolicy.LoginIncomplete);
+        options.Conventions.AuthorizeFolder("/settings", LoginPolicy.AllowIncomplete);
     }
 );
 
@@ -82,7 +84,6 @@ app.UseStatusCodePages(context =>
     if (context.HttpContext.Response.StatusCode == 401)
     {
         var returnTo = context.HttpContext.Request.GetEncodedUrl();
-        Console.WriteLine(returnTo);
         context.HttpContext.Response.Redirect($"/login?returnTo={returnTo}", true);
     }
 
