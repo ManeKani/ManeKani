@@ -9,4 +9,8 @@ public interface IApiKeyRepository
     public Task<PublicApiKey?> GetUserApiKey(Guid userId, Guid apiKeyId);
     public Task<IEnumerable<PublicApiKey>> GetUserApiKeys(Guid userId);
     public Task DeleteUserApiKey(Guid userId, Guid apiKeyId);
+
+    public Task<ApiKey?> GetApiKeyByHash(string apiKeyHash);
+
+    public Task<ApiKey> UseApiKey(Guid apiKeyId);
 }

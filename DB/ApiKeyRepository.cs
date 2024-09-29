@@ -1,4 +1,5 @@
 using System.Data;
+
 using System.Text.Json;
 using Dapper;
 using ManeKani.Core.Interfaces;
@@ -22,7 +23,6 @@ public class ApiKeysRepository : Repository, IApiKeyRepository
             hash = request.Hash,
             created_by_user_id = userId,
         });
-
     }
 
     public Task DeleteUserApiKey(Guid userId, Guid apiKeyId)
@@ -56,6 +56,26 @@ public class ApiKeysRepository : Repository, IApiKeyRepository
             .Select("api_keys.{id, name, prefix, claims, used_at, revoked_at, created_at, updated_at, created_by_user_id}")
             .OrderByDesc("created_at")
             .GetAsync<PublicApiKey>();
+    }
+
+    public Task<ApiKey?> GetApiKeyByHash(string apiKeyHash)
+    {
+        return Database.Query("api_keys")
+            .Where("hash", apiKeyHash)
+            .Select("api_keys.{id, name, prefix, claims, used_at, revoked_at, created_at, updated_at, created_by_user_id}")
+            .FirstOrDefaultAsync<ApiKey?>();
+    }
+
+    public Task<ApiKey> UseApiKey(Guid apiKeyId)
+    {
+        return Database.Connection.QuerySingleAsync<ApiKey>(@"
+            UPDATE api_keys
+                SET used_at = NOW()
+            WHERE id = @id
+            RETURNING id, hash, name, prefix, claims, used_at, revoked_at, created_at, updated_at, created_by_user_id", new
+        {
+            id = apiKeyId,
+        });
     }
 }
 

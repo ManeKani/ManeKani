@@ -22,11 +22,11 @@ public class PublicApiKey
 
 public struct ApiKeyClaims
 {
-    public bool DeckWrite;
-    public bool DeckDelete;
-    public bool SubjectWrite;
-    public bool SubjectDelete;
-    public bool ReviewCreate;
-    public bool StudyDataWrite;
-    public bool StudyDataDelete;
+    public bool DeckWrite { get; set; }
+    public bool DeckDelete { get; set; }
+    public bool SubjectWrite { get; set; }
+    public bool SubjectDelete { get; set; }
+    public bool ReviewCreate { get; set; }
+    public bool StudyDataWrite { get; set; }
+    public bool StudyDataDelete { get; set; }
 }
