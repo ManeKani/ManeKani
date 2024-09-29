@@ -14,23 +14,21 @@ public static class SettingsNavigationExtension
         string classes = ""
     )
     {
-        var li = new TagBuilder("li");
-        li.AddCssClass(classes);
+        var a = new TagBuilder("a");
 
         var viewData = htmlHelper.ViewContext.ViewData;
         var settingPage = viewData["Setting"] as string;
 
         if (string.Equals(settingPage, page, StringComparison.OrdinalIgnoreCase))
         {
-            li.AddCssClass("active");
+            a.AddCssClass("active");
         }
 
-        var a = new TagBuilder("a");
         a.Attributes.Add("href", pageModel);
+        a.AddCssClass(classes);
         a.InnerHtml.Append(text);
-        li.InnerHtml.AppendHtml(a);
 
-        return new HtmlString(GetString(li));
+        return new HtmlString(GetString(a));
     }
 
     public static string GetString(IHtmlContent content)

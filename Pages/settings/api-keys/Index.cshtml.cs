@@ -1,9 +1,11 @@
 using ManeKani.Core.Models;
+using ManeKani.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Humanizer;
 using SqlKata.Execution;
 using ManeKani.DB;
 using Microsoft.AspNetCore.Mvc;
+using ManeKani.Core.Adapters;
 
 namespace ManeKani.Pages.Settings.ApiKeys;
 
@@ -22,12 +24,17 @@ public class ApiKeysIndexModel : PageModel
     public async Task<IActionResult> OnGetAsync()
     {
         // this should always be defined, ensured by the authorization filter
-        var userId = HttpContext.User.Identity!.Name!;
+        CurrentUser = UsersAdapter.GetUser(_db, Guid.Parse(HttpContext.User.Identity!.Name!)).Result;
+        ViewData["CurrentUser"] = CurrentUser;
+
+        // // this should always be defined, ensured by the authorization filter
+        // CurrentUser = UsersAdapter.GetUser(_db, Guid.Parse(HttpContext.User.Identity!.Name!)).Result;
+        // ViewData["CurrentUser"] = CurrentUser;
 
         // query user api keys
-        var keys = await _db.GetUserApiKeys(Guid.Parse(userId));
+        var keys = await _db.GetUserApiKeys(CurrentUser.Id);
 
-        _logger.LogInformation("User {} has {} API keys", userId, keys.Count());
+        _logger.LogInformation("User {} has {} API keys", CurrentUser.Id, keys.Count());
 
         ApiKeys = [.. keys];
 
@@ -35,5 +42,7 @@ public class ApiKeysIndexModel : PageModel
     }
 
     public PublicApiKey[] ApiKeys { get; set; } = [];
+
+    public User? CurrentUser { get; set; }
 
 }

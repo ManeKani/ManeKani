@@ -1,30 +1,46 @@
 @model NavbarModel
 
-<nav
-    class="bg-base-200 z-50 px-3 py-1.5 h-12 flex justify-between items-center fixed w-[calc(100%-15rem)] border-b border-base-300">
-    <label class="input input-bordered px-2 min-w-48 w-2/3 bg-base-300 flex items-center gap-2 h-full">
-        <span class="text-base-content">
-            @await Html.Icon("Search", new IconOptions { Size = 20 })
-        </span>
-        <input type="text" class="grow" placeholder="Search" autocomplete="off" />
-    </label>
+@using ManeKani.Core.Models;
 
-    <div class="flex items-center space-x-3 h-full justify-center">
+@{
+    User? currentUser = (User?)ViewData["CurrentUser"];
+}
+
+<nav
+    class="bg-base-200 z-40 px-3 py-1.5 h-14 flex justify-between items-center fixed w-full lg:w-[calc(100%-15rem)] border-b border-base-300">
+    <div class="flex items-center h-full w-full">
+        <div class="lg:hidden">
+            <label for="sidebar-drawer" aria-label="toggle sidebar"
+                class="transition-colors rounded-full border border-text-800 drawer-button block p-2 lg:hidden text-text-300 hover:text-text hover:border-text-300 cursor-pointer">
+                @await Html.Icon("Blocks", new IconOptions { Size = 20 })
+            </label>
+        </div>
+        <div class="leading-none lg:hidden">
+            <a asp-page="/index"
+                class="relative h-min px-2 inline-flex items-center gap-1 transition-[filter] ease-in duration-200 filter drop-shadow-[0_0_5px_oklch(var(--a)_/_0)] hover:drop-shadow-[0_0_5px_oklch(var(--a)_/_0.36)]">
+                <span class="text-accent">
+                    @await Html.Icon("Claw", new IconOptions { Size = 40 })
+                </span>
+                <span class="hidden md:block font-title font-bold text-xl mr-2">ManeKani</span>
+            </a>
+        </div>
+        <label class="input input-bordered px-2 min-w-48 w-2/3 bg-base-300 flex items-center gap-2 h-full">
+            <span class="text-base-content">
+                @await Html.Icon("Search", new IconOptions { Size = 20 })
+            </span>
+            <input type="text" class="grow" placeholder="Search" autocomplete="off" />
+        </label>
+    </div>
+
+    <div class="flex items-center space-x-5 h-full justify-center">
         <div class="group indicator leading-[0]" title="notifications">
             <button class="text-base-content filter transition-all group-focus:brightness-75 group-hover:brightness-75">
                 @await Html.Icon("Bell")
             </button>
             <span class="badge badge-xs badge-accent indicator-item"></span>
         </div>
-        <div class="group relative leading-[0]">
-            <a asp-page="/settings/index"
-                class="text-base-content transition-all filter group-focus:brightness-75 group-hover:brightness-75"
-                title="Settings">
-                @await Html.Icon("Settings")
-            </a>
-        </div>
-        <div class="relative leading-[0]">
-            @if (User.Identity?.IsAuthenticated ?? false)
+        <div class="relative w-max leading-[0]">
+            @if (@currentUser != null)
             {
                 <button class="user-icon w-8 h-8">
                     @* <img src="@Model.UserData.ProfilePicture" alt="User Profile Picture"

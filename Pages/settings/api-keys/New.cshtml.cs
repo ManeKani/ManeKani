@@ -8,6 +8,7 @@ using System.Security.Claims;
 using ManeKani.Auth.Ory;
 using ManeKani.Core.Models;
 using ManeKani.DB;
+using Newtonsoft.Json;
 
 namespace ManeKani.Pages.Settings.ApiKeys;
 
@@ -30,10 +31,13 @@ public class ApiKeysNewModel : PageModel
 
 
         string? keyName = Request.Form["apikey_name"];
-        string? keyPermissions = Request.Form["apikey_permission"];
+        string? keyPermissions = Request.Form["apikey_permissions"];
+        _logger.LogInformation("Creating API key with permissions: {}", keyPermissions);
+
 
 
         var keyClaims = new ApiKeyClaims();
+
         keyPermissions?.Split(",").Select(x => x.Trim()).ToList().ForEach(x =>
         {
             switch (x)
@@ -61,6 +65,7 @@ public class ApiKeysNewModel : PageModel
                     break;
             }
         });
+        _logger.LogInformation("Parsed API key claims: {}", JsonConvert.SerializeObject(keyClaims, Formatting.Indented));
 
         var apiKey = await ApiKeysAdapter.CreateApiKey(_db, user.Id,
             new CreateApiKeyRequest

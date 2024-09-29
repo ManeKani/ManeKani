@@ -9,22 +9,31 @@ public class IconOptions
     public int Size { get; set; } = 24;
     public string? Color { get; set; } = "currentColor";
 
+    public string Id { get; }
+
     public IconOptions()
     {
+        Id = $"icon-{Guid.NewGuid():N}";
     }
 
     public IconOptions(int size)
     {
+        Id = $"icon-{Guid.NewGuid():N}";
+
         Size = size;
     }
 
     public IconOptions(string color)
     {
+        Id = $"icon-{Guid.NewGuid():N}";
+
         Color = color;
     }
 
     public IconOptions(int size, string color)
     {
+        Id = $"icon-{Guid.NewGuid():N}";
+
         Size = size;
         Color = color;
     }

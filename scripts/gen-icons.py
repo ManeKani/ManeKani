@@ -18,11 +18,15 @@ def gen_cs_icon(svg: str) -> str:
 
 
 def patch_svg(svg: str) -> str:
+    # generate a random string for the id
     svg = re.sub(r'(?<!-)fill="\#[^"]*"', 'fill="@Model.Color"', svg)
     svg = re.sub(r'(?<!-)stroke="\#[^"]*"', 'stroke="@Model.Color"', svg)
 
     svg = re.sub(r'(?<!-)width="[^"]*"', 'width="@width"', svg, count=1)
     svg = re.sub(r'(?<!-)height="[^"]*"', 'height="@height"', svg, count=1)
+
+    svg = re.sub(r"id=\"[^\"]*\"", 'id="@Model.Id"', svg, count=1)
+    svg = re.sub(r"mask=\"[^\"]*\"", 'mask="url(#@Model.Id)"', svg, count=1)
 
     return svg
 
@@ -42,9 +46,8 @@ def main():
                 svg = patch_svg(read_svg(os.path.join(root, file)))
                 icon = gen_cs_icon(svg)
 
-                out_path = Path(
-                    f"Pages/Shared/Icons/_{filename.replace(" ", "")}.cshtml"
-                )
+                rep = filename.replace(" ", "")
+                out_path = Path(f"Pages/Shared/Icons/_{rep}.cshtml")
 
                 if out_path.exists:
                     out_path.chmod(0o644)
